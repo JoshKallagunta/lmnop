@@ -91,8 +91,13 @@ DATABASES = {
     # When you use Postgres, comment out or remove this DB config. 
     
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'lmnop.sqlite',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'awnzdtxh',
+        'USER': 'awnzdtxh',
+        'PASSWORD' : os.environ['LMNOP_DB_PW'],
+        'HOST' : 'hansken.db.elephantsql.com',
+        'PORT' : '5432',
+
     }
 }
 
