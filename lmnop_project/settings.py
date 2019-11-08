@@ -97,8 +97,7 @@ DATABASES = {
         'PASSWORD' : os.environ['LMNOP_DB_PW'],
         'HOST' : 'hansken.db.elephantsql.com',
         'PORT' : '5432',
-
-    }
+    },
 }
 
 
