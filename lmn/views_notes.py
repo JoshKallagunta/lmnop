@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Venue, Artist, Note, Show
-from .forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from .forms import VenueSearchForm, NewNoteForm, NoteEditPhotoForm, ArtistSearchForm, UserRegistrationForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -23,6 +23,7 @@ def new_note(request, show_pk):
             note.user = request.user
             note.show = show
             note.posted_date = timezone.now()
+            note.photo = photo
             note.save()
             return redirect('lmn:note_detail', note_pk=note.pk)
 
@@ -50,4 +51,19 @@ def notes_for_show(request, show_pk):   # pk = show pk
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    return render(request, 'lmn/notes/note_detail.html' , {'note' : note })
+
+    if request.method == 'POST':
+        photo_form = NoteEditPhotoForm(request.POST, request.FILES, instance=note)
+
+        if photo_form.is_valid():
+            photo_form.save()
+            #messages.info(request, 'Photo uploaded successfully!')
+        #else:
+            #print()
+            #messages.error(request, photo_form.errors)
+
+        return redirect('lmn:note_detail', note_pk=note_pk)
+    else: #GET
+        photo_form = NoteEditPhotoForm(instance=note)
+
+    return render(request, 'lmn/notes/note_detail.html', {'note': note, 'photo_form': photo_form })
