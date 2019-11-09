@@ -94,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'awnzdtxh',
         'USER': 'awnzdtxh',
-        'PASSWORD' : os.environ['LMNOP_DB_PW'],
+        'PASSWORD' : 'gdDvXbkXBJo678Q1LFywCdkZVFRvrelw',
         'HOST' : 'hansken.db.elephantsql.com',
         'PORT' : '5432',
     },
