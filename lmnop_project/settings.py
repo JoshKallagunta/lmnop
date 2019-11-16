@@ -88,8 +88,8 @@ DATABASES = {
     #     'PORT' : '5432',
     # },
 
-    # When you use Postgres, comment out or remove this DB config. 
-    
+    # When you use Postgres, comment out or remove this DB config.
+
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'lmnop.sqlite',
@@ -142,3 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Should provide the user object.
 LOGIN_REDIRECT_URL = 'lmn:my_user_profile'
 LOGOUT_REDIRECT_URL = 'lmn:homepage'
+
+#Media URL for user-uploaded media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
