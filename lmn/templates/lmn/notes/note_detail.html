@@ -12,10 +12,12 @@
   <p id="note_photo_label">No photo uploaded</p>
 {% endif %}
 
-<form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ photo_form.as_p }}
-<button type="submit">Update Photo</button>
-</form>
+{% if request.user == note.user %}
+  <form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ photo_form.as_p }}
+  <button type="submit">Update Photo</button>
+  </form>
+{% endif %}
 
 {% endblock %}
