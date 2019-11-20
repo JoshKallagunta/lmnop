@@ -19,10 +19,10 @@ class NewNoteForm(forms.ModelForm):
         model = Note
         fields = ('title', 'text', 'photo')
 
-class NoteEditPhotoForm(forms.ModelForm):
+class NoteEditForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ('photo',)
+        fields = ('photo', 'rating')
 
 
 class UserRegistrationForm(UserCreationForm):
