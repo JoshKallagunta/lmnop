@@ -9,6 +9,11 @@ button {
   color: black !important;
 }
 
+.btn-search {
+  background-color: #ffc704;
+  color: black !important;
+}
+
 #welcome_user_msg, #login_or_sign_up {
   position: absolute;
   right: 0px;
