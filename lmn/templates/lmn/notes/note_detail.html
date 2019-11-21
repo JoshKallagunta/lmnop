@@ -14,7 +14,16 @@
 
 <form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ photo_form.as_p }}
+  {% if note.photo %}
+  <div class="fileClear">
+    <label for="photo-clear_id">Clear Photo</label> 
+    <input id="photo-clear_id" type="checkbox" class="clear" name="photo-clear" id="photo-clear_id">
+  </div>
+  {% endif %}
+  <div class="fileUpload btn btn-primary">
+      <span>Browse</span>
+      <input id="id_photo" type="file" class="upload" name="photo" accept="image/*" />
+  </div><br><br>
 <button type="submit">Update Photo</button>
 </form>
 </div>
