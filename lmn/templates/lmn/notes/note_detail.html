@@ -1,6 +1,6 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
-
+<div class="block-content">
 
 <h2 id="note_page_title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by <a href="{% url 'lmn:user_profile' user_pk=note.user.pk %}">{{ note.user }}</a></h2>
 
@@ -12,12 +12,18 @@
   <p id="note_photo_label">No photo uploaded</p>
 {% endif %}
 
-{% if request.user == note.user %}
-  <form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ photo_form.as_p }}
-  <button type="submit">Update Photo</button>
-  </form>
-{% endif %}
-
-{% endblock %}
+<form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if note.photo %}
+  <div class="fileClear">
+    <label for="photo-clear_id">Clear Photo</label> 
+    <input id="photo-clear_id" type="checkbox" class="clear" name="photo-clear" id="photo-clear_id">
+  </div>
+  {% endif %}
+  <div class="fileUpload btn btn-primary">
+      <span>Browse</span>
+      <input id="id_photo" type="file" class="upload" name="photo" accept="image/*" />
+  </div><br><br>
+<button type="submit">Update Photo</button>
+</form>
+</div>

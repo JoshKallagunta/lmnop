@@ -70,7 +70,6 @@ button {
   text-align: right;
 }
 
-<<<<<<< css_update
 .venue-search-input, .artist-search-input, .user-input {
   color: black !important;
 }
@@ -176,10 +175,11 @@ button {
 
 /* end note_detail.html */
 
+
 /* -------------- */
-=======
+
+/* -------------- */
 .user_badge {
   width: 1.5%;
   height: 3%;
 }
->>>>>>> master
