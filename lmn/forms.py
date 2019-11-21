@@ -7,11 +7,13 @@ from django.forms import ValidationError
 
 
 class VenueSearchForm(forms.Form):
-    search_name = forms.CharField(label='Venue Name', max_length=200)
+    search_name = forms.CharField(label='Venue Name', max_length=200,
+    widget=forms.TextInput(attrs={'class': 'venue-search-input'}))
 
 
 class ArtistSearchForm(forms.Form):
-    search_name = forms.CharField(label='Artist Name', max_length=200)
+    search_name = forms.CharField(label='Artist Name', max_length=200,
+    widget=forms.TextInput(attrs={'class': 'artist-search-input'}))
 
 
 class NewNoteForm(forms.ModelForm):
