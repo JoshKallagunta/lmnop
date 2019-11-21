@@ -3,30 +3,45 @@
 <head>
   <title>LMNOP</title>
   <link rel="stylesheet" href='{% static 'css/base_style.css' %}'></link>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">LMN</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a  class="nav-link" href="{% url 'lmn:venue_list' %}">Venues</a>
+        </li>
+        <li class="nav-item">
+          <a class='nav-link' href="{% url 'lmn:artist_list' %}">Artists</a>
+        </li>
+        <li class="nav-item">
+          <a class='nav-link' href="{% url 'lmn:latest_notes' %}">Notes</a>
+        </li>
+      </ul>
+      {% if user.is_authenticated %}
+      <span id='welcome_user_msg' class='navbar-text'>You are logged in, <a href="{% url 'lmn:user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'lmn:logout' %}">Logout</a></span>
 
-<h1>LMN</h1>
+    {% else %}
 
+      <span id='login_or_sign_up' class='navbar-text'><a href="{% url 'lmn:login' %}?next={{ request.path }}">Login or sign up</a></span>
 
-<a href="{% url 'lmn:venue_list' %}">Venues</a>
-<a href="{% url 'lmn:artist_list' %}">Artists</a>
-<a href="{% url 'lmn:latest_notes' %}">Notes</a>
+    {% endif %}
+    </div>
+  </nav>
+<div class='container'>
 
-{% if user.is_authenticated %}
-  <span id='welcome_user_msg'>You are logged in, <a href="{% url 'lmn:user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'lmn:logout' %}">Logout</a></span>
-
-{% else %}
-
-  <span id='login_or_sign_up'><a href="{% url 'lmn:login' %}?next={{ request.path }}">Login or sign up</a></span>
-
-{% endif %}
-
-<hr>
-
+<hr class='my-5'>
 {% block content %}
 {% endblock %}
-
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

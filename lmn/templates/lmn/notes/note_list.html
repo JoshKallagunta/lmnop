@@ -10,9 +10,12 @@
 
 
 {% for note in notes %}
-
+<div class='card my-2'>
 <div id="note_{{ note.pk }}">
+  <div class="card-title my-2">
   <h3 class="note_title"><a href="{% url 'lmn:note_detail' note_pk=note.pk %}">{{ note.title }}</a></h3>
+  </div>
+  <div class='card-body'>
   <p class="show_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
   <P class="note_info">Posted on {{ note.posted_date }} by <a class='user' href="{% url 'lmn:user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a></p>
   <p class='note_text'>{{ note.text|truncatechars:100 }}</p>
@@ -21,8 +24,9 @@
   {% else %}
     <p class='note_photo_label'>No photo uploaded</p>
   {% endif %}
-  <hr>
-
+</div>
+</div>
+</div>
 {% empty %}
 
 <p>No notes.</p>
