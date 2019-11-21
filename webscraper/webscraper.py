@@ -80,7 +80,7 @@ def scrape_sort(content, venues, ages, content_list):
 
 url = 'https://first-avenue.com/calendar'
 response = requests.get(url,timeout=5)
-content = soup(response.content, "html.parser")
+content = soup(response.content, "lxml")
 
 venues = drop_scrape(content, 'select', 'venue', 'option')
 venues.append('Mainroom + Entry') #adds missing venue option

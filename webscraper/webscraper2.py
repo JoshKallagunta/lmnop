@@ -28,15 +28,17 @@ stat_item = "field field-name-field-event-status field-type-list-text field-labe
 
 url = 'https://first-avenue.com/calendar'
 response = requests.get(url,timeout=5)
-content = soup(response.content, "html.parser")
+content = soup(response.content, "lxml")
 cal_dict = {}
 
 #TODO: Add date key, value
 #Could possibly make this a switch, with the div class as key
 def main(content, cal_dict):
+
+    cal_list = cal_scrape(content, cal_item)
     content_dict = {}
-    ctr = 1
-    for child in cal_scrape(content, cal_item):
+
+    for ctr,child in enumerate(cal_list,1):
         performer = child_scrape2(child, perf_item)
         if 'CANCELED' in performer:
             continue
@@ -82,7 +84,6 @@ def main(content, cal_dict):
             content_dict['status'] = status
         if len(content_dict) >= 2:
             cal_dict[ctr] = content_dict
-            ctr = ctr + 1
             content_dict = {}
         else:
             content_dict = {}
