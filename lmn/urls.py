@@ -29,6 +29,7 @@ urlpatterns = [
     # User related
     path('user/profile/<int:user_pk>/', views_users.user_profile, name='user_profile'),
     path('user/profile/', views_users.my_user_profile, name='my_user_profile'),
+    path('user/password/', views_users.my_user_password, name='my_user_password'),
 
     # Account related
     path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),

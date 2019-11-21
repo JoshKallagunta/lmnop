@@ -1,0 +1,11 @@
+
+{% block content %}
+<h2>{{user.username}} profile</h2>
+<form method='POST' action="">{% csrf_token %}
+<table id='edit_form'>
+  {{ form.as_p }}
+</table>
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

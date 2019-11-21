@@ -25,7 +25,11 @@ SECRET_KEY = '8c01$#j44g3znb)$q0()8)!%ts-jc)k12!a75-!63qb%bj=d4k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if os.getenv('GAE_INSTANCE'):
+    ALLOWED_HOSTS = ['lmnop-project.appspot.com']
+else:
+    ALLOWED_HOSTS = ['127.0.0.1']
+
 
 
 # Application definition
@@ -91,10 +95,17 @@ DATABASES = {
     # When you use Postgres, comment out or remove this DB config.
 
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'lmnop.sqlite',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'venues',
+        'USER': 'artist',
+        'PASSWORD' : os.getenv('ARTIST_PW'),
+        'HOST' : 'lmnop-project:us-central1:lmnop-db',
+        'PORT' : '5432',
     },
 }
+
+if not os.getenv('GAE_INSTANCE'):
+    DATABASES['default'] ['HOST'] = '127.0.0.1'
 
 
 
