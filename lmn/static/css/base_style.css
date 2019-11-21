@@ -70,6 +70,7 @@ button {
   text-align: right;
 }
 
+
 .venue-search-input, .artist-search-input, .user-input {
   color: black !important;
 }
@@ -183,3 +184,4 @@ button {
   width: 1.5%;
   height: 3%;
 }
+
