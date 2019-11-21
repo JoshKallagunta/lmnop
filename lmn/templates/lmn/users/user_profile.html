@@ -6,7 +6,15 @@
 Includes list of user's notes with title and preview of text.
 Text truncated to 200 characters. -->
 
-<h2 id='username_notes'><b>{{ user.username }}'s notes</b></h2>
+<h2 id='username_notes'>{{ user.username }}'s notes</h2>
+{% if notes.count >= 10 %}
+  <img src="/media/medals/gold.png" class="user_badge"></img>
+{% elif notes.count >= 5 %}
+  <img src="/media/medals/silver.png" class="user_badge"></img>
+{% elif notes.count >= 3 %}
+  <img src="/media/medals/bronze.png" class="user_badge"></img>
+{% endif %}
+<div class="user_count_badge"><p class="note_count">Total Submissions: {{ notes.count }}</p>
 
 {% for note in notes %}
 
