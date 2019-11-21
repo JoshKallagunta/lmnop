@@ -1,9 +1,8 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
+<h2><b><u>Venue List</u></b></h2>
 
-<h2>Venue List</h2>
-
-<div>
+<div class="venue-search-form">
 <P>Venue Search</P>
 
 <!-- The form fields are built from the definition in forms.py -->
@@ -21,7 +20,7 @@
   <h2 id="venue_list_title">All venues</h2>
 {% endif %}
 
-<div>
+<div class="venue-list">
 
 {% for venue in venues %}
 
@@ -37,5 +36,4 @@
 {% endfor %}
 
 </div>
-
 {% endblock %}
