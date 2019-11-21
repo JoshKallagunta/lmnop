@@ -1,32 +1,49 @@
 {% load static %}
-<html>
-<head>
-  <title>LMNOP</title>
-  <link rel="stylesheet" href='{% static 'css/base_style.css' %}'></link>
-</head>
+<html lang="en">
+<div class='base-bg'>
+  <head>
+    <title>1st & 7th Events</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href='{% static 'css/base_style.css' %}'></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  </head>
 
-<body>
 
-<h1>LMN</h1>
+  <body>
+
+    <div class="titlebar-links">
+      <h1 class="page-title"><a href="{% url 'lmn:homepage' %}"">1st & 7th Events</a></h1>
 
 
-<a href="{% url 'lmn:venue_list' %}">Venues</a>
-<a href="{% url 'lmn:artist_list' %}">Artists</a>
-<a href="{% url 'lmn:latest_notes' %}">Notes</a>
+      <div class="titlebar-sub-links">
+        <div class="titlebar-center-links">
+          <a href="{% url 'lmn:venue_list' %}">Venues</a>
+          <a href="{% url 'lmn:artist_list' %}">Artists</a>
+          <a href="{% url 'lmn:latest_notes' %}">Notes</a>
+        </div>
 
-{% if user.is_authenticated %}
-  <span id='welcome_user_msg'>You are logged in, <a href="{% url 'lmn:user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'lmn:logout' %}">Logout</a></span>
+        <div class="title-bar-right-links">
+          {% if user.is_authenticated %}
+            <span id='welcome_user_msg'>You are logged in, <a href="{% url 'lmn:user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'lmn:logout' %}">Logout</a></span>
 
-{% else %}
+          {% else %}
 
-  <span id='login_or_sign_up'><a href="{% url 'lmn:login' %}?next={{ request.path }}">Login or sign up</a></span>
+            <span id='login_or_sign_up'><a href="{% url 'lmn:login' %}?next={{ request.path }}">Login or sign up</a></span>
 
-{% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-<hr>
+    <hr>
+</div>
+<div class="block-content">
+    {% block content %}
+    
+    {% endblock %}
+  </div>
 
-{% block content %}
-{% endblock %}
-
-</body>
+  </body>
 </html>
+

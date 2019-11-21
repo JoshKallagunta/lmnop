@@ -1,27 +1,28 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
 
-
 {% if show %}
   <h2 id="show_title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
 {% else %}
-  <h2>Latest Notes</h2>
+  <h2><b><u>Latest Notes</u></b></h2>
 {% endif %}
 
 
 {% for note in notes %}
 
 <div id="note_{{ note.pk }}">
-  <h3 class="note_title"><a href="{% url 'lmn:note_detail' note_pk=note.pk %}">{{ note.title }}</a></h3>
-  <p class="show_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
-  <P class="note_info">Posted on {{ note.posted_date }} by <a class='user' href="{% url 'lmn:user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a></p>
-  <p class='note_text'>{{ note.text|truncatechars:100 }}</p>
-  {% if note.photo %}
-    <p class='note_photo_label'><a href={{ note.photo.url }}>Photo</a></p>
-  {% else %}
-    <p class='note_photo_label'>No photo uploaded</p>
-  {% endif %}
-  <hr>
+  <div id="note-content">
+    <h3 class="note_title"><a href="{% url 'lmn:note_detail' note_pk=note.pk %}">{{ note.title }}</a></h3>
+    <p class="show_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
+    <P class="note_info">Posted on {{ note.posted_date }} by <a class='user' href="{% url 'lmn:user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a></p>
+    <p class='note_text'>{{ note.text|truncatechars:100 }}</p>
+    {% if note.photo %}
+      <p class='note_photo_label'><a href={{ note.photo.url }}>Photo</a></p>
+    {% else %}
+      <p class='note_photo_label'>No photo uploaded</p>
+    {% endif %}
+    <hr>
+</div></div>
 
 {% empty %}
 
@@ -39,5 +40,4 @@ display button to add new note for that show. -->
 </form>
 
 {% endif %}
-
 {% endblock %}
