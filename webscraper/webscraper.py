@@ -1,98 +1,120 @@
 from bs4 import BeautifulSoup as soup
 import requests
 import html
-import time
+import psycopg2
 
-def is_time_str(s): #checks for string in time format, returns True if in correct format
-    try:
-        time.strptime(s, '%I:%M %p')
-    except:
-        return False
-    else:
-        return True
+def cal_scrape(html,pClass):
+    return html.findAll("div", attrs={"class": pClass})
 
-#scrapes options from dropdown and strips html tags
-def drop_scrape(html, parent, pName, child):
-    list_name = [str(i.text) for i in html.find(parent, attrs={'name': pName}).findAll('option')]
-    list_name = list_name[1:] #removes unnecessary dropdown option
-    return list_name
+def child_scrape2(child, cClass):
+    return child.find("div", {"class": cClass}).text
 
-'''
-*Builds event dictionaries for content_list from scraped events*
-First Avenue's event calendar is formatted so the divs for each line of information
-aren't unique, and the number of lines of information aren't uniform (some events have
-two+ price points, have guest performers, are sold out, etc.)
+def child_scrape(content_dict, key, child, cClass):
+    content_dict[key] = child_scrape2(child, cClass)
+    return content_dict[key]
 
-Dictionary used for easier conversion to JSON
-String keys for readability, sorting/queries
-TODO: Figure out a way to cut down on elifs so this isn't so ugly/inefficient
-'''
-def scrape_sort(content, venues, ages, content_list):
-    temp_dict = {}
-    ctr = 0
-    price_ctr = 1
-    prevPriceKey = 'price1'
-    for event in content.findAll('div', attrs={"class": "field-items"}):
-        e = event.text
-        is_time = is_time_str(e)
-        if (e == 'day of show' or e == 'reserved table' or e == 'two show package' 
-        or e == 'reserved balcony seating'): #appends these strings to their price and removes old price string
-            new_string = temp_dict[prevPriceKey] + ' ' + e
-            del temp_dict[prevPriceKey]
-            temp_dict[prevPriceKey] = new_string
-        elif (ctr == 1 and 0 in temp_dict.keys()): #appends headline performer name to promoter titles like "93x presents" and removes old string
-            new_string = temp_dict[0] + ': ' + e
-            temp_dict['title'] = temp_dict[0]
-            temp_dict['title'] = new_string
-            del temp_dict[0]
-        elif (e != 'Buy Tickets' and e != ''): #checks for relevant event information to append to temp_dict ('Buy Tickets' link and blank strings aren't utilized)
-            temp_ctr = ctr #keeps ctr count after assigning ctr to key string
-            if (ctr == 0 and 'present' not in e): ctr = 'title' #changes first key to 'title' if it's not a promoter title that needs performer added to it
-            elif (ctr == 1 and 'with' in e): #removes 'with' from guest performer string
-                temp_e = e.replace('with ','')
-                e = temp_e
-                ctr = 'guests'
-            elif (ctr >= 1 and 'with' not in e and '$' in e): #checks for price value and number of price values for event
-                ctr = 'price' + str(price_ctr)
-                price_ctr = price_ctr + 1
-                prevPriceKey = ctr #keeps count of number of prices for event
-            elif (ctr >= 1 and 'at ' in e): #removes 'at ' from venue names to make it easier to check venue list
-                temp_e = e.replace('at ', '')
-                e = temp_e
-                if e in venues: ctr = 'venue' #checks if string in venues list
-            elif (ctr >= 1 and e in venues): ctr = 'venue' #checks if string in venues list when there isn't an 'at '
-            elif (ctr >= 2 and is_time == True): ctr = 'time' #checks for time value
-            elif (ctr >= 3 and e in ages): ctr = 'age' #checks for age requirement in ages list
-            elif (ctr >= 3 and e == 'Sold Out'): ctr = 'soldout' #checks for 'Sold Out' status
-            temp_dict[ctr] = e
-            ctr = temp_ctr
-            ctr = ctr + 1
-        elif (e == '' and len(temp_dict)>=2): #checks for blank strings/lines at the beginning & end of event lines
-            if '— CANCELED' in temp_dict['title']: #removes canceled events, resets temp_dict, ctr and price_ctr for next event
-                temp_dict = {}
-                ctr = 0
-                price_ctr = 1
-            else: #appends temp_dict to content_lest, resets temp_dict, ctr and price_ctr for next event
-                content_list.append(temp_dict)
-                temp_dict = {}
-                ctr = 0
-                price_ctr = 1
+
+#div classes
+cal_item = "field-group-format group_firstave_calendar_item field-group-div group-firstave-calendar-item speed-none effect-none"
+pres_item = "field field-name-field-event-presenter field-type-entityreference field-label-hidden"
+perf_item = "field field-name-field-event-performer field-type-entityreference field-label-hidden"
+guest_item = "field field-name-field-event-special-guests field-type-entityreference field-label-hidden"
+adv_item = "field field-name-field-event-price field-type-number-float field-label-hidden"
+doorp_item = "field field-name-field-event-door-price field-type-number-float field-label-hidden"
+doord_item = "field field-name-field-event-door-day-of field-type-list-text field-label-hidden"
+ven_item = "field field-name-field-event-venue field-type-entityreference field-label-hidden"
+time_item = "field field-name-field-event-date field-type-datetime field-label-hidden"
+age_item = "field field-name-field-event-age field-type-taxonomy-term-reference field-label-hidden"
+stat_item = "field field-name-field-event-status field-type-list-text field-label-hidden"
 
 url = 'https://first-avenue.com/calendar'
 response = requests.get(url,timeout=5)
 content = soup(response.content, "lxml")
+event_list = []
 
-venues = drop_scrape(content, 'select', 'venue', 'option')
-venues.append('Mainroom + Entry') #adds missing venue option
-ages = drop_scrape(content, 'select', 'age', 'option')
+def insert_events(event_list):
+    sql = """INSERT INTO events (date, presenter, performer, guest, adv_price, door_price, venue, time, age, status) VALUES(%(date)s, %(presenter)s, %(performer)s, %(guest)s, %(adv_price)s, %(door_price)s, %(venue)s, %(time)s, %(age)s, %(status)s)"""
+    conn = None
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.executemany(sql,event_list)
+        conn.commit()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
 
-content_list = []
+#TODO: Add date key, value
+#Could possibly make this a switch, with the div class as key
+def main(content, event_list):
 
-scrape_sort(content, venues, ages, content_list)
+    cal_list = cal_scrape(content, cal_item)
+    content_dict = {}
 
-for i in content_list:
+    for ctr,child in enumerate(cal_list,1):
+        content_dict['date'] = 'Wednesday, January 1st, 2019'
+        performer = child_scrape2(child, perf_item)
+        if 'CANCELED' in performer:
+            continue
+        try:
+            child_scrape(content_dict, 'presenter', child, pres_item)   
+        except:
+            content_dict['presenter'] = None
+            pass
+        content_dict['performer'] = performer
+        try:
+            guest = child_scrape2(child, guest_item)
+            new_guest = guest.replace('with ', '')
+            content_dict['guest'] = new_guest
+        except:
+            content_dict['guest'] = None
+            pass
+        try:
+            child_scrape(content_dict, 'adv_price', child, adv_item)
+        except:
+            content_dict['adv_price'] = None
+            pass
+        try:
+            desc = child_scrape2(child, doord_item)
+        except:
+            desc = ''
+        try:
+            price = child_scrape2(child, doorp_item)
+            content_dict['door_price'] = price + ' ' + desc
+        except:
+            content_dict['door_price'] = None
+            pass
+        try:
+            venue = child_scrape2(child, ven_item)
+            try:
+                new_venue = venue.replace('at ','')
+                content_dict['venue'] = new_venue
+            except:
+                content_dict['venue'] = venue
+                pass
+        except:
+            pass
+        child_scrape(content_dict, 'time', child, time_item)
+        child_scrape(content_dict, 'age', child, age_item)
+        status = child_scrape2(child, stat_item)
+        if status == "Sold Out":
+            content_dict['status'] = status
+        else:
+            content_dict['status'] = None
+        if len(content_dict) >= 2:
+            event_list.append(content_dict)
+            content_dict = {}
+        else:
+            content_dict = {}
+
+main(content, event_list)
+insert_events(event_list)
+
+for event in event_list:
     print()
-    print(i)
+    print(event)
     print()
-
-#print(content)
