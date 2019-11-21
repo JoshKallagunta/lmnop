@@ -1,0 +1,14 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#043524",
+        "titleBar.activeBackground": "#054A33",
+        "titleBar.activeForeground": "#EBFEF7"
+    },
+    "python.pythonPath": "env\\Scripts\\python.exe",
+    "code-runner.executorMap": {
+        "python": "D:\\Ben\\Documents\\Python\\project5\\lmnop\\env\\Scripts\\activate.bat && python -u",
+    },
+    "cSpell.words": [
+        "strptime"
+    ]
+}
