@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,10 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8c01$#j44g3znb)$q0()8)!%ts-jc)k12!a75-!63qb%bj=d4k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getenv('GAE_INSTANCE'):
-    DEBUG = False
-else:
-    DEBUG = True
+#if os.getenv('GAE_INSTANCE'):
+ #   DEBUG = False
+#else:
+ #   DEBUG = True
+
+DEBUG = True
 
 
 if os.getenv('GAE_INSTANCE'):
@@ -170,4 +173,6 @@ STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
 #GS_BUCKET_NAME = 'user-venue-image'
 
 #MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/static/'
+
+
 
