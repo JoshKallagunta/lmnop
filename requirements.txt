@@ -5,4 +5,8 @@ selenium==3.141.0
 wheel==0.24.0
 psycopg2==2.8.4
 gunicorn==20.0.0
+#google-cloud-storages==1.22.0
+#django-storages==1.7.2
+
+
 

@@ -23,7 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8c01$#j44g3znb)$q0()8)!%ts-jc)k12!a75-!63qb%bj=d4k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('GAE_INSTANCE'):
+    DEBUG = False
+else:
+    DEBUG = True
+
 
 if os.getenv('GAE_INSTANCE'):
     ALLOWED_HOSTS = ['lmnop-project.appspot.com']
@@ -99,7 +103,7 @@ DATABASES = {
         'NAME': 'venues',
         'USER': 'artist',
         'PASSWORD' : os.getenv('ARTIST_PW'),
-        'HOST' : 'lmnop-project:us-central1:lmnop-db',
+        'HOST' : '/cloudsql/lmnop-project:us-central1:lmnop-db',
         'PORT' : '5432',
     },
 }
@@ -146,8 +150,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
 # Where to send user after successful login if no other page is provided.
 # Should provide the user object.
@@ -157,3 +161,13 @@ LOGOUT_REDIRECT_URL = 'lmn:homepage'
 #Media URL for user-uploaded media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+GS_STATIC_FILE_BUCKET = 'lmnop-project.appspot.com'
+
+STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
+#DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+#GS_BUCKET_NAME = 'user-venue-image'
+
+#MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/static/'
+
