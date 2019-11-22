@@ -2,6 +2,13 @@
 {% block content %}
 <div class="block-content">
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> d4eb3d6c25c06de8a273166fe4df8147e9215240
+=======
+>>>>>>> 277dede9befea528b1558012561c241a4de588ea
 <h2 id="note_page_title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by <a href="{% url 'lmn:user_profile' user_pk=note.user.pk %}">{{ note.user }}</a></h2>
 
 <p id="note_title"><b>{{ note.title}}</b></p>
@@ -12,6 +19,20 @@
   <p id="note_photo_label">No photo uploaded</p>
 {% endif %}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+{% if request.user == note.user %}
+  <form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ photo_form.as_p }}
+  <button type="submit">Update Photo</button>
+  </form>
+{% endif %}
+
+{% endblock %}
+=======
+=======
+>>>>>>> 277dede9befea528b1558012561c241a4de588ea
 <form action="{% url 'lmn:note_detail' note_pk=note.pk %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   {% if note.photo %}
@@ -28,3 +49,14 @@
 </form>
 </div>
 
+<a class="twitter-share-button"
+  link rel="canonical"
+  href="https://twitter.com/intent/tweet">
+Tweet</a>
+
+
+<<<<<<< HEAD
+>>>>>>> d4eb3d6c25c06de8a273166fe4df8147e9215240
+=======
+
+>>>>>>> 277dede9befea528b1558012561c241a4de588ea
