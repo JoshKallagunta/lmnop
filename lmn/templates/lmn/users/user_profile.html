@@ -5,7 +5,7 @@
 
 Includes list of user's notes with title and preview of text.
 Text truncated to 200 characters. -->
-
+<a href="{% url 'lmn:my_user_profile' %}">Edit User Profile</a>
 <h2 id='username_notes'>{{ user.username }}'s notes</h2>
 {% if notes.count >= 10 %}
   <img src="/media/medals/gold.png" class="user_badge"></img>
